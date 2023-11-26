@@ -1,0 +1,59 @@
+[worldserver]
+
+########################################
+# Level 15 Boost
+########################################
+#
+#    LevelBoost.Enable
+#        Description: 
+#        Default:     1 - Enabled
+#                     0 - Disabled
+#
+
+LevelBoost.Enable = 1
+
+#
+#    LearnSpells.Enable
+#       Description: 
+#       Default:     1 - Enabled
+#                    0 - Disabled
+#
+
+LearnSpells.Enable = 1
+
+#
+#    LearnProficencies.Enable
+#       Description: 
+#       Default:     1 - Enabled
+#                    0 - Disabled
+#
+
+LearnProficiencies.Enable = 1
+
+#
+#    LearnTalents.Enable
+#       Description: 
+#       Default:     1 - Enabled
+#                    0 - Disabled
+#
+
+LearnTalents.Enable = 1
+
+#
+#    DualSpec.Enable
+#       Description: 
+#       Default:     1 - Enabled
+#                    0 - Disabled
+#
+
+DualSpec.Enable = 1
+
+#
+#    DestroyGear.Enable
+#       Description: 
+#       Default:     1 - Enabled
+#                    0 - Disabled
+#
+
+DestroyGear.Enable = 1
+  
