@@ -1,25 +1,52 @@
-# SKELETON - Module template
+# Level 15 Boost
 
-[English](README.md) | [Español](README_ES.md)
+## Description
+"Level 15 Boost" is a module for AzerothCore that offers an optional level boost to level 15, available as a gossip option at each race's starting zone initial quest giver. This module is designed to enhance the player experience by providing a quick start option for players who wish to skip the early leveling phase.
+
+## Features
+- Automatic boost to level 15 via a gossip option with the initial quest giver in each race's starting zone.
+- Destruction of starting items and equipping players with appropriate gear, talents, and glyphs based on configuration.
+- Configurable options for enabling or disabling specific features like learning spells, proficiencies, talents, dual spec, and destroying gear.
+- Ability to reload tables and extract gear templates based on player's current gear.
+
+## Requirements
+Set EnforceItemAttributes.Enable to 0 in the `worldserver.conf` otherwise the display id's of starting gear will not be correct.
+
+## Configuration
+The module includes several configurable options in the `mod_level_15_boost.conf` file:
 
 
-## How to create your own module
+```ini
+# Level 15 Boost
+LevelBoost.Enable = 1
 
-1. Use the script `create_module.sh` located in [`modules/`](https://github.com/azerothcore/azerothcore-wotlk/tree/master/modules) to start quickly with all the files you need and your git repo configured correctly (heavily recommended).
-1. You can then use these scripts to start your project: https://github.com/azerothcore/azerothcore-boilerplates
-1. Do not hesitate to compare with some of our newer/bigger/famous modules.
-1. Edit the `README.md` and other files (`include.sh` etc...) to fit your module. Note: the README is automatically created from `README_example.md` when you use the script `create_module.sh`.
-1. Publish your module to our [catalogue](https://github.com/azerothcore/modules-catalogue).
+# Learn Spells
+LearnSpells.Enable = 1
 
+# Learn Proficiencies
+LearnProficiencies.Enable = 1
 
-## How to test your module?
+# Learn Talents
+LearnTalents.Enable = 1
 
-Disable PCH (precompiled headers) and try to compile. To disable PCH, set `-DNOPCH=1` with Cmake (more info [here](http://www.azerothcore.org/wiki/CMake-options)).
+# Learn Glyphs
+LearnGlyphs.Enable = 1
 
-If you forgot some headers, it is time to add them!
+# Enable Dual Spec
+DualSpec.Enable = 1
 
-## Licensing
+# Destroy Starting Gear
+DestroyGear.Enable = 1
+```
 
-The default license of the skeleton-module template is the MIT but you can use a different license for your own modules.
+## Usage Instructions
 
-So modules can also be kept private. However, if you need to add new hooks to the core, as well as improving existing ones, you have to share your improvements because the main core is released under the AGPL license. Please [provide a PR](https://www.azerothcore.org/wiki/How-to-create-a-PR) if that is the case.
+### Commands
+
+- `.levelboost reload`: Reload the module's tables.
+- `.levelboost extract [spec]`: Extract and update the gear template to match what the player running the command is currently wearing. Example: `.levelboost extract Retribution`
+
+## Support and Contributions
+
+For support, questions, or contributions, please use the GitHub Issues page associated with this project.
+
