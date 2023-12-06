@@ -12,12 +12,21 @@
 #include "Chat.h"
 #include "Pet.h"
 #include "Config.h"
+#include "World.h"
 
 #define ITEM_DEFAULT_ARROWS      2512
 #define ITEM_DEFAULT_BULLETS     2516
-
 #define ITEM_BOOST_ARROWS        2515
 #define ITEM_BOOST_BULLETS       2519
+#define ITEM_BOOST_MACE          1117
+#define ITEM_BOOST_SWORD         788
+#define ITEM_BOOST_AXE           1157
+#define ITEM_BOOST_STAFF         1908
+#define ITEM_BOOST_SHIELD_1      1957
+#define ITEM_BOOST_SHIELD_2      1961
+#define ITEM_SHAMAN_TOTEM_1      5175
+#define ITEM_SHAMAN_TOTEM_2      5176
+
 
 const int ARROW_COUNT = 1000;
 const int BULLET_COUNT = 1000;
@@ -56,6 +65,7 @@ struct GearTemplate
 {
     std::string player_class;
     std::string player_spec;
+    std::string player_race;
     uint8 equipment_slot;
     uint32 item_entry;
 };
@@ -98,7 +108,7 @@ public:
     TalentTemplateContainer talentTemplateList;
     GlyphTemplateContainer glyphTemplateList;
 
-    bool levelBoost, dualSpec, learnSpells, LearnProficiencies, learnTalents, destroyGear;
+    bool levelBoost, dualSpec, learnSpells, LearnProficiencies, learnTalents, learnGlyphs, destroyGear;
     std::string player_spec;
 
     void LoadTalentContainer();
@@ -124,6 +134,7 @@ public:
     void ExtractTalentTemplate(Player* player, std::string player_spec);
     void ExtractGlyphTemplate(Player* player, std::string player_spec);
     std::string GetClassString(Player* player);
+    std::string GetRaceString(Player* player);
 };
 
 #define sLevelBoost LevelBoost::instance()

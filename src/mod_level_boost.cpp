@@ -61,7 +61,7 @@ void LevelBoost::LoadGlyphContainer()
 
 void LevelBoost::LoadGearContainer()
 {
-    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `equipment_slot`, `item_entry` FROM mod_boost_gear");
+    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `player_race`, `equipment_slot`, `item_entry` FROM mod_boost_gear");
 
     if (!result)
     {
@@ -79,8 +79,9 @@ void LevelBoost::LoadGearContainer()
         GearTemplate gear;
         gear.player_class = fields[0].Get<std::string>();
         gear.player_spec = fields[1].Get<std::string>();
-        gear.equipment_slot = fields[2].Get<uint8>();
-        gear.item_entry = fields[3].Get<uint32>();
+        gear.player_race = fields[2].Get<std::string>();
+        gear.equipment_slot = fields[3].Get<uint8>();
+        gear.item_entry = fields[4].Get<uint32>();
         gearTemplateList.push_back(gear);
 
         ++count;
@@ -159,29 +160,29 @@ void LevelBoost::LearnDualSpec(Player* player)
 
 void LevelBoost::DestroyGear(Player* player)
 {
+    if (!destroyGear)
+        return;
+
     for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
     {
-        if (i != EQUIPMENT_SLOT_BODY)
+        if (Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
         {
-            if (Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
+            player->DestroyItemCount(item->GetEntry(), 1, true, true);
+
+            if (item)
             {
                 player->DestroyItemCount(item->GetEntry(), 1, true, true);
 
-                if (item)
+                if (item->IsInWorld())
                 {
-                    player->DestroyItemCount(item->GetEntry(), 1, true, true);
-
-                    if (item->IsInWorld())
-                    {
-                        item->RemoveFromWorld();
-                        item->DestroyForPlayer(player);
-                    }
-
-                    item->SetUInt32Value(ITEM_FIELD_CONTAINED, 0);
-                    item->SetSlot(NULL_SLOT);
-                    item->SetState(ITEM_REMOVED, player);
-
+                    item->RemoveFromWorld();
+                    item->DestroyForPlayer(player);
                 }
+
+                item->SetUInt32Value(ITEM_FIELD_CONTAINED, 0);
+                item->SetSlot(NULL_SLOT);
+                item->SetState(ITEM_REMOVED, player);
+
             }
         }
     }
@@ -211,14 +212,42 @@ void LevelBoost::AddClassItems(Player* player)
     switch (player->getClass())
     {
     case CLASS_SHAMAN:
-        player->AddItem(5175, 1);
-        player->AddItem(5176, 1);
+        player->AddItem(ITEM_SHAMAN_TOTEM_1, 1);
+        player->AddItem(ITEM_SHAMAN_TOTEM_2, 1);
+        break;
+    
+    case CLASS_WARRIOR:
+        switch (player->getRace())
+        {
+        case RACE_UNDEAD_PLAYER:
+        case RACE_TROLL:
+        case RACE_HUMAN:
+        case RACE_NIGHTELF:
+        case RACE_GNOME:
+        case RACE_DRAENEI:
+            player->AddItem(ITEM_BOOST_SWORD, 1);
+            player->AddItem(ITEM_BOOST_SHIELD_2, 1);
+            break;
+        case RACE_ORC:
+        case RACE_DWARF:
+            player->AddItem(ITEM_BOOST_AXE, 1);
+            player->AddItem(ITEM_BOOST_SHIELD_2, 1);
+            break;
+        case RACE_TAUREN:
+            player->AddItem(ITEM_BOOST_MACE, 1);
+            player->AddItem(ITEM_BOOST_SHIELD_2, 1);
+            break;
+        
+        }
         break;
     }
 }
 
 void LevelBoost::LearnSpellsForLevel(Player* player)
 {
+    if (!learnSpells)
+        return;
+
     for (auto& classSpell : classSpellsList)
     {
         if (player->getClass() == classSpell.class_id && player->GetLevel() >= classSpell.required_level)
@@ -236,6 +265,9 @@ void LevelBoost::LearnSpellsForLevel(Player* player)
 
 void LevelBoost::LearnProficienciesForLevel(Player* player)
 {
+    if (!LearnProficiencies)
+        return;
+
     for (auto& classProficiency : classProficienciesList)
     {
         if (player->getClass() == classProficiency.class_id && player->GetLevel() >= classProficiency.required_level)
@@ -329,11 +361,12 @@ void LevelBoost::HandleBoost(Player* player, Creature* creature)
     AddClassItems(player);
     player->UpdateSkillsToMaxSkillsForLevel();
     CloseGossipMenuFor(player);
+    player->SendTalentsInfoData(false);
 }
 
 std::string LevelBoost::GetClassString(Player* player)
 {
-switch (player->getClass())
+    switch (player->getClass())
     {
     case CLASS_WARRIOR:
         return "Warrior";
@@ -366,6 +399,44 @@ switch (player->getClass())
     return "Unknown";
 }
 
+std::string LevelBoost::GetRaceString(Player* player)
+{
+    switch (player->getRace())
+    {
+    case RACE_HUMAN:
+        return "Human";
+        break;
+    case RACE_DWARF:
+        return "Dwarf";
+        break;
+    case RACE_NIGHTELF:
+        return "Nightelf";
+        break;
+    case RACE_GNOME:
+        return "Gnome";
+        break;
+    case RACE_DRAENEI:
+        return "Draenei";
+        break;
+    case RACE_ORC:
+        return "Orc";
+        break;
+    case RACE_UNDEAD_PLAYER:
+        return "Undead";
+        break;
+    case RACE_TAUREN:
+        return "Tauren";
+        break;
+    case RACE_TROLL:
+        return "Troll";
+        break;
+    case RACE_BLOODELF:
+        return "Bloodelf";
+        break;
+    }
+    return "Unknown";
+}
+
 bool LevelBoost::TemplateExists(Player* player, std::string player_spec)
 {
     for (auto& gearTemplate : gearTemplateList)
@@ -382,10 +453,11 @@ bool LevelBoost::TemplateExists(Player* player, std::string player_spec)
 
 void LevelBoost::ApplyGearTemplate(Player* player)
 {
-
     for (auto& gearTemplate : gearTemplateList)
     {
-        if (GetClassString(player) == gearTemplate.player_class && sLevelBoost->player_spec == gearTemplate.player_spec)
+        if (GetClassString(player) == gearTemplate.player_class &&
+            sLevelBoost->player_spec == gearTemplate.player_spec &&
+            GetRaceString(player) == gearTemplate.player_race)
         {
             player->EquipNewItem(gearTemplate.equipment_slot, gearTemplate.item_entry, true);
         }
@@ -394,6 +466,10 @@ void LevelBoost::ApplyGearTemplate(Player* player)
 
 void LevelBoost::ApplyGlyphTemplate(Player* player)
 {
+    if (!learnGlyphs)
+        return;
+
+
     for (auto& glyphTemplate : glyphTemplateList)
     {
         if (GetClassString(player) == glyphTemplate.player_class && sLevelBoost->player_spec == glyphTemplate.player_spec)
@@ -406,6 +482,9 @@ void LevelBoost::ApplyGlyphTemplate(Player* player)
 
 void LevelBoost::ApplyTalentTemplate(Player* player)
 {
+    if (!learnTalents)
+        return;
+
     for (auto& talentTemplate : talentTemplateList)
     {
         if (GetClassString(player) == talentTemplate.player_class && sLevelBoost->player_spec == talentTemplate.player_spec)
@@ -415,7 +494,6 @@ void LevelBoost::ApplyTalentTemplate(Player* player)
         }
     }
     player->SetFreeTalentPoints(0);
-    player->SendTalentsInfoData(false);
 }
 
 bool LevelBoost::ApplyFullTemplate(Player* player, std::string player_spec)
@@ -443,7 +521,7 @@ bool LevelBoost::ApplyFullTemplate(Player* player, std::string player_spec)
 
 void LevelBoost::ExtractGearTemplate(Player* player, std::string player_spec)
 {
-    WorldDatabase.Query("DELETE FROM mod_boost_gear WHERE player_class = '{}' AND player_spec = '{}'", GetClassString(player), player_spec);
+    WorldDatabase.Query("DELETE FROM mod_boost_gear WHERE player_class = '{}' AND player_spec = '{}' AND player_race = '{}'", GetClassString(player), player_spec, GetRaceString(player));
 
     for (uint8 i = EQUIPMENT_SLOT_START; i < EQUIPMENT_SLOT_END; ++i)
     {
@@ -451,7 +529,7 @@ void LevelBoost::ExtractGearTemplate(Player* player, std::string player_spec)
         {
             if (Item* item = player->GetItemByPos(INVENTORY_SLOT_BAG_0, i))
             {
-                WorldDatabase.Execute("INSERT INTO mod_boost_gear (player_class, player_spec, equipment_slot, item_entry) VALUES ('{}', '{}', '{}', '{}')", GetClassString(player), player_spec, i, item->GetEntry());
+                WorldDatabase.Execute("INSERT INTO mod_boost_gear (player_class, player_spec, player_race, equipment_slot, item_entry) VALUES ('{}', '{}', '{}', '{}', '{}')", GetClassString(player), player_spec, GetRaceString(player), i, item->GetEntry());
             }
         }
     }
@@ -817,6 +895,7 @@ public:
         sLevelBoost->learnSpells = sConfigMgr->GetOption<bool>("LearnSpells.Enable", true);
         sLevelBoost->LearnProficiencies = sConfigMgr->GetOption<bool>("LearnProficiencies.Enable", true);
         sLevelBoost->learnTalents = sConfigMgr->GetOption<bool>("LearnTalents.Enable", true);
+        sLevelBoost->learnGlyphs = sConfigMgr->GetOption<bool>("LearnGlyphs.Enable", true);
         sLevelBoost->destroyGear = sConfigMgr->GetOption<bool>("DestroyGear.Enable", true);
 
         LOG_INFO("module", ">> Loaded Level 15 Boost Config in {} ms.", GetMSTimeDiffToNow(oldTime));
