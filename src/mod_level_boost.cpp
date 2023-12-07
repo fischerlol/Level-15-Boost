@@ -864,11 +864,13 @@ class BoostNPC_World : public WorldScript
 public:
     BoostNPC_World(): WorldScript("BoostNPC_World") { }
 
+    void OnBeforeConfigLoad(bool /*reload*/) override
+    {
+        LoadConfig();
+    }
+
     void OnStartup() override
     {
-        LOG_INFO("module", ">> Loading Level 15 Boost Config...");
-        LoadConfig();
-
         LOG_INFO("module", ">> Loading Spell Container...");
         sLevelBoost->LoadSpellContainer();
 
@@ -897,7 +899,7 @@ public:
         sLevelBoost->learnTalents = sConfigMgr->GetOption<bool>("LearnTalents.Enable", true);
         sLevelBoost->learnGlyphs = sConfigMgr->GetOption<bool>("LearnGlyphs.Enable", true);
         sLevelBoost->destroyGear = sConfigMgr->GetOption<bool>("DestroyGear.Enable", true);
-
+        
         LOG_INFO("module", ">> Loaded Level 15 Boost Config in {} ms.", GetMSTimeDiffToNow(oldTime));
     }
 };
