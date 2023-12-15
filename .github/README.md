@@ -41,6 +41,9 @@ DestroyGear.Enable = 1
 
 ## Usage Instructions
 
+### Renaming .conf.dist to .conf
+The mod_level_15_boost.conf.dist file is a template file that you will need to rename to mod_level_15_boost.conf before using the module. To do this, simply open the file in a text editor and change the name from .conf.dist to .conf.
+
 ### Commands
 
 - `.levelboost reload`: Reload the module's tables.
