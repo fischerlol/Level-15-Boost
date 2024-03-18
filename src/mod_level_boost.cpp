@@ -2,7 +2,7 @@
 
 void LevelBoost::LoadTalentContainer()
 {
-    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `talent_id` FROM mod_boost_talents");
+    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `talent_id` FROM `mod_boost_talents`");
 
     if (!result)
     {
@@ -31,7 +31,7 @@ void LevelBoost::LoadTalentContainer()
 
 void LevelBoost::LoadGlyphContainer()
 {
-    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `glyph_slot`, `glyph_id` FROM mod_boost_glyphs");
+    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `glyph_slot`, `glyph_id` FROM `mod_boost_glyphs`");
 
     if (!result)
     {
@@ -61,7 +61,7 @@ void LevelBoost::LoadGlyphContainer()
 
 void LevelBoost::LoadGearContainer()
 {
-    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `player_race`, `equipment_slot`, `item_entry` FROM mod_boost_gear");
+    QueryResult result = WorldDatabase.Query("SELECT `player_class`, `player_spec`, `player_race`, `equipment_slot`, `item_entry` FROM `mod_boost_gear`");
 
     if (!result)
     {
@@ -92,7 +92,7 @@ void LevelBoost::LoadGearContainer()
 
 void LevelBoost::LoadSpellContainer()
 {
-    QueryResult result = WorldDatabase.Query("SELECT `class_id`, `spell_id`, `required_level`, `required_spell_id` FROM mod_boost_class_spells ORDER BY `class_id`, `required_level`");
+    QueryResult result = WorldDatabase.Query("SELECT `class_id`, `spell_id`, `required_level`, `required_spell_id` FROM `mod_boost_class_spells` ORDER BY `class_id`, `required_level`");
 
     if (!result)
     {
@@ -122,7 +122,7 @@ void LevelBoost::LoadSpellContainer()
 
 void LevelBoost::LoadProficiencyContainer()
 {
-    QueryResult result = WorldDatabase.Query("SELECT `class_id`, `spell_id`, `required_level` FROM mod_boost_class_proficiencies ORDER BY `class_id`");
+    QueryResult result = WorldDatabase.Query("SELECT `class_id`, `spell_id`, `required_level` FROM `mod_boost_class_proficiencies` ORDER BY `class_id`");
 
     if (!result)
     {
@@ -306,7 +306,7 @@ void LevelBoost::CreateHunterPet(Player* player, Creature* creature, uint32 entr
     
     if (!hunterPet->InitStatsForLevel(player->getLevel()))
     {
-        sLog->outMessage("server", LogLevel::LOG_LEVEL_ERROR, "Pet Create fail: No init stats for pet with entry {}", entry);
+        LOG_ERROR("server", "Pet Create fail: No init stats for pet with entry {}", entry);
         delete hunterPet;
         return;
     }
@@ -447,7 +447,6 @@ bool LevelBoost::TemplateExists(Player* player, std::string player_spec)
         }
     }
 
-
     return false;
 }
 
@@ -468,7 +467,6 @@ void LevelBoost::ApplyGlyphTemplate(Player* player)
 {
     if (!learnGlyphs)
         return;
-
 
     for (auto& glyphTemplate : glyphTemplateList)
     {
@@ -608,7 +606,6 @@ void LevelBoost::ExtractTemplates(Player* player, std::string player_spec)
     ExtractGearTemplate(player, player_spec);
     ExtractTalentTemplate(player, player_spec);
     ExtractGlyphTemplate(player, player_spec);
-    
 }
 
 class BoostNPC_Template : public CreatureScript
@@ -904,27 +901,30 @@ public:
     }
 };
 
+using namespace Acore::ChatCommands;
+
 class BoostNPC_Command : public CommandScript
 {
 public:
     BoostNPC_Command() : CommandScript("BoostNPC_Command") { }
 
-    std::vector<ChatCommand> GetCommands() const override
+    ChatCommandTable GetCommands() const override
     {
-        static std::vector<ChatCommand> LevelBoostTable =
+        static ChatCommandTable LevelBoostTable =
         {
-            { "reload", SEC_ADMINISTRATOR, true, &HandleTableReload, "" },
-            { "extract", SEC_ADMINISTRATOR, true, &HandleExtractTemplate, ""},
+            { "reload", HandleTableReload, SEC_ADMINISTRATOR, Console::No },
+            { "extract", HandleExtractTemplate, SEC_ADMINISTRATOR, Console::No },
         };
 
-        static std::vector<ChatCommand> commandTable =
+        static ChatCommandTable commandTable =
         {
-            { "levelboost", SEC_ADMINISTRATOR, true, nullptr, "", LevelBoostTable }
+            { "levelboost", LevelBoostTable }
         };
+
         return commandTable;
     }
 
-    static bool HandleTableReload(ChatHandler* handler, const char* /*args*/)
+    static bool HandleTableReload(ChatHandler* handler)
     {
         LOG_INFO("module", ">> Reloading templates for Level 15 Boost...");
         sLevelBoost->LoadSpellContainer();
@@ -936,9 +936,10 @@ public:
         return true;
     }
 
-    static bool HandleExtractTemplate(ChatHandler* handler, const char* args)
+    static bool HandleExtractTemplate(ChatHandler* handler, std::string player_spec)
     {
         Player* player = handler->GetSession()->GetPlayer();
+
         if (!player)
         {
             LOG_INFO("module", ">> Level 15 Boost: No player selected.");
@@ -949,7 +950,7 @@ public:
         player->SaveToDB(trans, false, false);
         CharacterDatabase.CommitTransaction(trans);
 
-        sLevelBoost->player_spec = args;
+        sLevelBoost->player_spec = player_spec;
         sLevelBoost->ExtractTemplates(player, sLevelBoost->player_spec);
         handler->SendSysMessage("Successfully extracted template.");
 
