@@ -436,7 +436,7 @@ std::string LevelBoost::GetRaceString(Player* player)
     return "Unknown";
 }
 
-bool LevelBoost::TemplateExists(Player* player, std::string /*player_spec*/)
+bool LevelBoost::TemplateExists(Player* player)
 {
     for (auto& gearTemplate : gearTemplateList)
     {
@@ -495,9 +495,9 @@ void LevelBoost::ApplyTalentTemplate(Player* player)
 
 bool LevelBoost::ApplyFullTemplate(Player* player, std::string player_spec)
 {
-    if (!sLevelBoost->TemplateExists(player, player_spec))
+    if (!sLevelBoost->TemplateExists(player))
     {
-        player->GetSession()->SendAreaTriggerMessage("There's no templates for %s specialization yet.", player_spec);
+        player->GetSession()->SendAreaTriggerMessage("There's no templates for %s specialization yet.", player_spec.c_str());
         return false;
     }
 
@@ -511,6 +511,7 @@ bool LevelBoost::ApplyFullTemplate(Player* player, std::string player_spec)
     {
         player->SetPower(POWER_MANA, player->GetMaxPower(POWER_MANA));
     }
+
     player->SetHealth(player->GetMaxHealth());
 
     return true;

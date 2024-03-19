@@ -27,7 +27,6 @@
 #define ITEM_SHAMAN_TOTEM_1      5175
 #define ITEM_SHAMAN_TOTEM_2      5176
 
-
 const int ARROW_COUNT = 1000;
 const int BULLET_COUNT = 1000;
 const int BOOST_TEXT = 70000;
@@ -37,7 +36,7 @@ enum GossipId
     GOSSIP_MAIN_MENU = 0,
     GOSSIP_LEVEL_15_BOOST = 1,
     GOSSIP_GEAR = 100,
-    GOSSIP_RESET_TALENTS = 999,
+    GOSSIP_RESET_TALENTS = 999
 };
 
 enum Spells
@@ -85,7 +84,6 @@ struct GlyphTemplate
     uint32 glyph_id;
 };
 
-
 class LevelBoost
 {
 public:
@@ -124,7 +122,7 @@ public:
     void LearnProficienciesForLevel(Player* Player);
     void HandleBoost(Player* player, Creature* creature);
     void CreateHunterPet(Player* player, Creature* creature, uint32 entry);
-    bool TemplateExists(Player* player, std::string /*player_spec*/);
+    bool TemplateExists(Player* player);
     bool ApplyFullTemplate(Player* player, std::string player_spec);
     void ApplyGearTemplate(Player* player);
     void ApplyTalentTemplate(Player* player);
