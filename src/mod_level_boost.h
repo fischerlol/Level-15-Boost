@@ -122,7 +122,7 @@ public:
     void HandleBoost(Player* player, Creature* creature);
     void CreateHunterPet(Player* player, Creature* creature, uint32 entry);
     bool TemplateExists(Player* player);
-    bool ApplyFullTemplate(Player* player, std::stringplayer_spec);
+    bool ApplyFullTemplate(Player* player, std::string player_spec);
     void ApplyGearTemplate(Player* player);
     void ApplyTalentTemplate(Player* player);
     void ApplyGlyphTemplate(Player* player);
