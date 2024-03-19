@@ -9,9 +9,6 @@
 - Configurable options for enabling or disabling specific features like learning spells, proficiencies, talents, dual spec, and destroying gear.
 - Ability to reload tables and extract gear templates based on player's current gear.
 
-## Requirements
-Set EnforceItemAttributes.Enable to 0 in the `worldserver.conf` otherwise the display id's of starting gear will not be correct.
-
 ## Configuration
 The module includes several configurable options in the `mod_level_15_boost.conf` file:
 
