@@ -211,34 +211,33 @@ void LevelBoost::AddClassItems(Player* player)
 {
     switch (player->getClass())
     {
-    case CLASS_SHAMAN:
-        player->AddItem(ITEM_SHAMAN_TOTEM_1, 1);
-        player->AddItem(ITEM_SHAMAN_TOTEM_2, 1);
-        break;
-    
-    case CLASS_WARRIOR:
-        switch (player->getRace())
-        {
-        case RACE_UNDEAD_PLAYER:
-        case RACE_TROLL:
-        case RACE_HUMAN:
-        case RACE_NIGHTELF:
-        case RACE_GNOME:
-        case RACE_DRAENEI:
-            player->AddItem(ITEM_BOOST_SWORD, 1);
-            player->AddItem(ITEM_BOOST_SHIELD_2, 1);
+        case CLASS_SHAMAN:
+            player->AddItem(ITEM_SHAMAN_TOTEM_1, 1);
+            player->AddItem(ITEM_SHAMAN_TOTEM_2, 1);
             break;
-        case RACE_ORC:
-        case RACE_DWARF:
-            player->AddItem(ITEM_BOOST_AXE, 1);
-            player->AddItem(ITEM_BOOST_SHIELD_2, 1);
-            break;
-        case RACE_TAUREN:
-            player->AddItem(ITEM_BOOST_MACE, 1);
-            player->AddItem(ITEM_BOOST_SHIELD_2, 1);
-            break;
-        
-        }
+
+        case CLASS_WARRIOR:
+            switch (player->getRace())
+            {
+                case RACE_UNDEAD_PLAYER:
+                case RACE_TROLL:
+                case RACE_HUMAN:
+                case RACE_NIGHTELF:
+                case RACE_GNOME:
+                case RACE_DRAENEI:
+                    player->AddItem(ITEM_BOOST_SWORD, 1);
+                    player->AddItem(ITEM_BOOST_SHIELD_2, 1);
+                    break;
+                case RACE_ORC:
+                case RACE_DWARF:
+                    player->AddItem(ITEM_BOOST_AXE, 1);
+                    player->AddItem(ITEM_BOOST_SHIELD_2, 1);
+                    break;
+                case RACE_TAUREN:
+                    player->AddItem(ITEM_BOOST_MACE, 1);
+                    player->AddItem(ITEM_BOOST_SHIELD_2, 1);
+                    break;
+            }
         break;
     }
 }
@@ -303,7 +302,7 @@ void LevelBoost::CreateHunterPet(Player* player, Creature* creature, uint32 entr
     tempCreature->SetHealth(0);
 
     hunterPet->SetPower(POWER_HAPPINESS, 1048000);
-    
+
     if (!hunterPet->InitStatsForLevel(player->getLevel()))
     {
         LOG_ERROR("server", "Pet Create fail: No init stats for pet with entry {}", entry);
@@ -437,7 +436,7 @@ std::string LevelBoost::GetRaceString(Player* player)
     return "Unknown";
 }
 
-bool LevelBoost::TemplateExists(Player* player, std::string player_spec)
+bool LevelBoost::TemplateExists(Player* player, std::string /*player_spec*/)
 {
     for (auto& gearTemplate : gearTemplateList)
     {
@@ -896,7 +895,7 @@ public:
         sLevelBoost->learnTalents = sConfigMgr->GetOption<bool>("LearnTalents.Enable", true);
         sLevelBoost->learnGlyphs = sConfigMgr->GetOption<bool>("LearnGlyphs.Enable", true);
         sLevelBoost->destroyGear = sConfigMgr->GetOption<bool>("DestroyGear.Enable", true);
-        
+
         LOG_INFO("module", ">> Loaded Level 15 Boost Config in {} ms.", GetMSTimeDiffToNow(oldTime));
     }
 };

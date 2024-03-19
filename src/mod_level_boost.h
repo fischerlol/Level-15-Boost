@@ -124,7 +124,7 @@ public:
     void LearnProficienciesForLevel(Player* Player);
     void HandleBoost(Player* player, Creature* creature);
     void CreateHunterPet(Player* player, Creature* creature, uint32 entry);
-    bool TemplateExists(Player* player, std::string player_spec);
+    bool TemplateExists(Player* player, std::string /*player_spec*/);
     bool ApplyFullTemplate(Player* player, std::string player_spec);
     void ApplyGearTemplate(Player* player);
     void ApplyTalentTemplate(Player* player);
