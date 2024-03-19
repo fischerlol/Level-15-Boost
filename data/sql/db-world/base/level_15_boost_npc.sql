@@ -11,4 +11,4 @@ UPDATE `creature_template` SET `ScriptName` = 'BoostNPC_Template' WHERE `entry` 
 UPDATE `creature_template` SET `ScriptName` = 'BoostNPC_Template' WHERE `entry` = 2980;  -- Grull Hawkwind (Tauren)
 
 DELETE FROM `npc_text` WHERE `ID` = @base_text;
-INSERT INTO `npc_text` (`ID`, `text0_0`) VALUES (@base_text, 'Hello');
+INSERT INTO `npc_text` (`ID`, `text0_0`) VALUES (@base_text, 'Choose your specialization:');
