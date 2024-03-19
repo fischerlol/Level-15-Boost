@@ -14,18 +14,18 @@
 #include "Config.h"
 #include "World.h"
 
-#define ITEM_DEFAULT_ARROWS     2512
-#define ITEM_DEFAULT_BULLETS    2516
-#define ITEM_BOOST_ARROWS       2515
-#define ITEM_BOOST_BULLETS      2519
-#define ITEM_BOOST_MACE         1117
-#define ITEM_BOOST_SWORD        788
-#define ITEM_BOOST_AXE          1157
-#define ITEM_BOOST_STAFF        1908
-#define ITEM_BOOST_SHIELD_1     1957
-#define ITEM_BOOST_SHIELD_2     1961
-#define ITEM_SHAMAN_TOTEM_1     5175
-#define ITEM_SHAMAN_TOTEM_2     5176
+#define ITEM_DEFAULT_ARROWS 2512
+#define ITEM_DEFAULT_BULLETS 2516
+#define ITEM_BOOST_ARROWS 2515
+#define ITEM_BOOST_BULLETS 2519
+#define ITEM_BOOST_MACE 1117
+#define ITEM_BOOST_SWORD 788
+#define ITEM_BOOST_AXE 1157
+#define ITEM_BOOST_STAFF 1908
+#define ITEM_BOOST_SHIELD_1 1957
+#define ITEM_BOOST_SHIELD_2 1961
+#define ITEM_SHAMAN_TOTEM_1 5175
+#define ITEM_SHAMAN_TOTEM_2 5176
 
 const int ARROW_COUNT = 1000;
 const int BULLET_COUNT = 1000;
@@ -99,7 +99,6 @@ public:
     typedef std::vector<TalentTemplate> TalentTemplateContainer;
     typedef std::vector<GlyphTemplate> GlyphTemplateContainer;
 
-
     ClassSpellsContainer classSpellsList;
     ClassProficienciesContainer classProficienciesList;
     GearTemplateContainer gearTemplateList;
@@ -114,25 +113,25 @@ public:
     void LoadGearContainer();
     void LoadSpellContainer();
     void LoadProficiencyContainer();
-    void LearnDualSpec(Player* player);
-    void DestroyGear(Player* player);
-    void DestroyProjectiles(Player* player);
-    void AddClassItems(Player* player);
-    void LearnSpellsForLevel(Player* player);
-    void LearnProficienciesForLevel(Player* Player);
-    void HandleBoost(Player* player, Creature* creature);
-    void CreateHunterPet(Player* player, Creature* creature, uint32 entry);
-    bool TemplateExists(Player* player);
-    bool ApplyFullTemplate(Player* player, std::string player_spec);
-    void ApplyGearTemplate(Player* player);
-    void ApplyTalentTemplate(Player* player);
-    void ApplyGlyphTemplate(Player* player);
-    void ExtractTemplates(Player* player, std::string player_spec);
-    void ExtractGearTemplate(Player* player, std::string player_spec);
-    void ExtractTalentTemplate(Player* player, std::string player_spec);
-    void ExtractGlyphTemplate(Player* player, std::string player_spec);
-    std::string GetClassString(Player* player);
-    std::string GetRaceString(Player* player);
+    void LearnDualSpec(Player*player);
+    void DestroyGear(Player*player);
+    void DestroyProjectiles(Player*player);
+    void AddClassItems(Player*player);
+    void LearnSpellsForLevel(Player*player);
+    void LearnProficienciesForLevel(Player*Player);
+    void HandleBoost(Player*player,Creature*creature);
+    void CreateHunterPet(Player*player,Creature*creature,uint32entry);
+    bool TemplateExists(Player*player);
+    bool ApplyFullTemplate(Player*player,std::stringplayer_spec);
+    void ApplyGearTemplate(Player*player);
+    void ApplyTalentTemplate(Player*player);
+    void ApplyGlyphTemplate(Player*player);
+    void ExtractTemplates(Player*player,std::stringplayer_spec);
+    void ExtractGearTemplate(Player*player,std::stringplayer_spec);
+    void ExtractTalentTemplate(Player*player,std::stringplayer_spec);
+    void ExtractGlyphTemplate(Player*player,std::stringplayer_spec);
+    std::string GetClassString(Player*player);
+    std::string GetRaceString(Player*player);
 };
 
 #define sLevelBoost LevelBoost::instance()
