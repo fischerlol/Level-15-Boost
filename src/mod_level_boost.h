@@ -14,19 +14,18 @@
 #include "Config.h"
 #include "World.h"
 
-#define ITEM_DEFAULT_ARROWS      2512
-#define ITEM_DEFAULT_BULLETS     2516
-#define ITEM_BOOST_ARROWS        2515
-#define ITEM_BOOST_BULLETS       2519
-#define ITEM_BOOST_MACE          1117
-#define ITEM_BOOST_SWORD         788
-#define ITEM_BOOST_AXE           1157
-#define ITEM_BOOST_STAFF         1908
-#define ITEM_BOOST_SHIELD_1      1957
-#define ITEM_BOOST_SHIELD_2      1961
-#define ITEM_SHAMAN_TOTEM_1      5175
-#define ITEM_SHAMAN_TOTEM_2      5176
-
+#define ITEM_DEFAULT_ARROWS 2512
+#define ITEM_DEFAULT_BULLETS 2516
+#define ITEM_BOOST_ARROWS 2515
+#define ITEM_BOOST_BULLETS 2519
+#define ITEM_BOOST_MACE 1117
+#define ITEM_BOOST_SWORD 788
+#define ITEM_BOOST_AXE 1157
+#define ITEM_BOOST_STAFF 1908
+#define ITEM_BOOST_SHIELD_1 1957
+#define ITEM_BOOST_SHIELD_2 1961
+#define ITEM_SHAMAN_TOTEM_1 5175
+#define ITEM_SHAMAN_TOTEM_2 5176
 
 const int ARROW_COUNT = 1000;
 const int BULLET_COUNT = 1000;
@@ -37,7 +36,7 @@ enum GossipId
     GOSSIP_MAIN_MENU = 0,
     GOSSIP_LEVEL_15_BOOST = 1,
     GOSSIP_GEAR = 100,
-    GOSSIP_RESET_TALENTS = 999,
+    GOSSIP_RESET_TALENTS = 999
 };
 
 enum Spells
@@ -85,7 +84,6 @@ struct GlyphTemplate
     uint32 glyph_id;
 };
 
-
 class LevelBoost
 {
 public:
@@ -100,7 +98,6 @@ public:
     typedef std::vector<GearTemplate> GearTemplateContainer;
     typedef std::vector<TalentTemplate> TalentTemplateContainer;
     typedef std::vector<GlyphTemplate> GlyphTemplateContainer;
-
 
     ClassSpellsContainer classSpellsList;
     ClassProficienciesContainer classProficienciesList;
@@ -124,7 +121,7 @@ public:
     void LearnProficienciesForLevel(Player* Player);
     void HandleBoost(Player* player, Creature* creature);
     void CreateHunterPet(Player* player, Creature* creature, uint32 entry);
-    bool TemplateExists(Player* player, std::string player_spec);
+    bool TemplateExists(Player* player);
     bool ApplyFullTemplate(Player* player, std::string player_spec);
     void ApplyGearTemplate(Player* player);
     void ApplyTalentTemplate(Player* player);
