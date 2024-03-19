@@ -675,7 +675,7 @@ public:
         {
             LOG_INFO("server.worldserver", ">> Level 15 Boost: GOSSIP_LEVEL_15_BOOST selected.");
             ClearGossipMenuFor(player);
-            AddOptionsForClass(player, creature);
+            AddOptionsForClass(player);
             SendGossipMenuFor(player, BOOST_TEXT, creature->GetGUID());
         }
 
@@ -794,7 +794,7 @@ public:
         return true;
     }
 
-    void AddOptionsForClass(Player* player, Creature* creature)
+    void AddOptionsForClass(Player* player)
     {
         switch (player->getClass())
         {
