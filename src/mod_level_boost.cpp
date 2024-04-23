@@ -215,30 +215,6 @@ void LevelBoost::AddClassItems(Player* player)
             player->AddItem(ITEM_SHAMAN_TOTEM_1, 1);
             player->AddItem(ITEM_SHAMAN_TOTEM_2, 1);
             break;
-
-        case CLASS_WARRIOR:
-            switch (player->getRace())
-            {
-                case RACE_UNDEAD_PLAYER:
-                case RACE_TROLL:
-                case RACE_HUMAN:
-                case RACE_NIGHTELF:
-                case RACE_GNOME:
-                case RACE_DRAENEI:
-                    player->AddItem(ITEM_BOOST_SWORD, 1);
-                    player->AddItem(ITEM_BOOST_SHIELD_2, 1);
-                    break;
-                case RACE_ORC:
-                case RACE_DWARF:
-                    player->AddItem(ITEM_BOOST_AXE, 1);
-                    player->AddItem(ITEM_BOOST_SHIELD_2, 1);
-                    break;
-                case RACE_TAUREN:
-                    player->AddItem(ITEM_BOOST_MACE, 1);
-                    player->AddItem(ITEM_BOOST_SHIELD_2, 1);
-                    break;
-            }
-        break;
     }
 }
 
